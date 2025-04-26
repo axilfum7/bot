@@ -1,16 +1,24 @@
 import { Module } from '@nestjs/common';
-import { TelegrafModule } from 'nestjs-telegraf';
-import { BookService } from './book.service';
-import { BookController } from './book.controller';
-import { BookBot } from './book.bot';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BotModule } from './bot/bot.module';
+import { BooksModule } from './book/book.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    TelegrafModule.forRoot({
-      token: '7733523998:AAG4G1dhJoHcvTY7fT4Dae1o7doWWTstrIc',
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'axilfum7747',
+      database: 'telegram_bot',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
     }),
+    BotModule,
+    BooksModule,
+    UsersModule,
   ],
-  controllers: [BookController],
-  providers: [BookService, BookBot],
 })
 export class AppModule {}
